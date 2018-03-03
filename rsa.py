@@ -2,7 +2,7 @@
 # coding=utf-8
 import random
 import math
-import Euclid_algorithm
+
 
 def produce_odd(start, end):
     return random.randrange(start + 1, end, 2)
@@ -29,6 +29,46 @@ def euclid(a, b):
     return a
 
 
+class Euclid:
+    def __init__(self, num1, num2):
+        self.num1 = num1
+        self.num2 = num2
+        self.c = []
+        self.p = []
+        self.q = []
+
+        while self.num2 != 0:
+            self.c.append(self.num1)
+            self.p.append(self.num2)
+            x = self.num1 / self.num2
+            self.q.append(x)
+            r = self.num1 % self.num2
+            self.num1 = self.num2
+            self.num2 = r
+
+        self.q.pop(-1)
+
+    def method1(self):
+        print "\t{0:<4}".format(self.num1)
+        self.c.reverse()
+        self.p.reverse()
+        index = 1
+        if len(self.c) == 1:
+            index = 0
+        c_x = 1
+        p_x = -(self.c[index] / self.p[index])
+
+        while len(self.c) - 1 >= index:
+            print "\t{0:>8}{1}x({2})+{3}x({4})".format("=", self.c[index], c_x, self.p[index], p_x)
+            if len(self.c) - 1 == index:
+                break
+            tmp = c_x
+            c_x = p_x
+            p_x = tmp - (self.c[index + 1] / self.p[index + 1] * p_x)
+            index += 1
+        return c_x
+
+
 class RSA:
     small_primes = [2, 3, 5, 7, 11, 13, 17, 19]
     count = 0
@@ -36,7 +76,8 @@ class RSA:
     e = 17
 
     def __init__(self):
-        pass
+        self.pk = []
+        self.sk = []
 
     def small_primes_test(self, num):
         for small_prime in self.small_primes:
@@ -112,21 +153,38 @@ class RSA:
         p = produce_odd(start, end)
         return self.produce_prime1(p, start, end)
 
-    def encode(self):
+    def generate_key(self):
         print "[*]First prime is producing" + "." * 100
         p1 = self.produce_prime(2 ** 6, 2 ** 7)
         print "\t[*]The first prime is %d" % p1
         print "[*]Second prime is producing" + "." * 100
         p2 = self.produce_prime(2 ** 14, 2 ** 15)
         print "\t[*]The second prime is %d" % p2
-        n = p1 * p2 - 1
+        n = p1 * p2
+        yn = (p1 - 1) * (p2 - 1)
+        print "[*]d is producing" + "." * 100
+        E = Euclid(self.e, yn)
+        d = E.method1()
+        if d < 0:
+            d = d + yn
+        print "[*]d is: %d" % d
+        self.pk = [n, self.e]
+        print "[*]pk is:",
+        print self.pk
+        self.sk = [n, d]
+        print "[*]sk is:",
+        print self.sk
 
+    def encode(self, m):
+        return ModExp(m, self.pk[1], self.pk[0])
 
-
-    def decode(self):
-        pass
+    def decode(self, c):
+        return ModExp(c, self.sk[1], self.sk[0])
 
 
 if __name__ == "__main__":
     n = RSA()
-    n.encode()
+    n.generate_key()
+    cc = n.encode(32655)
+    print cc
+    print n.decode(cc)
