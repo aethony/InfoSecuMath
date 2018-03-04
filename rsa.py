@@ -162,6 +162,9 @@ class RSA:
         print "\t[*]The second prime is %d" % p2
         n = p1 * p2
         yn = (p1 - 1) * (p2 - 1)
+        if yn % self.e == 0:
+            self.generate_key()
+            exit()
         print "[*]d is producing" + "." * 100
         E = Euclid(self.e, yn)
         d = E.method1()
@@ -185,6 +188,6 @@ class RSA:
 if __name__ == "__main__":
     n = RSA()
     n.generate_key()
-    cc = n.encode(32655)
-    print cc
-    print n.decode(cc)
+    cc = n.encode(22)
+    print "[*]c is:%d" % cc
+    print "[*]m is:%d" % n.decode(cc)
