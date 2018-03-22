@@ -37,6 +37,12 @@ def getst1(n):
     else:
         return count, n
 
+def generte_b(b, n):
+    if euclid(b, n) > 1:
+        b = random.randint(2, n - 2)
+        return generte_b(b, n)
+    else:
+        return b
 
 def miller_rabin_test(n, k):
     """miller_rabin_test is miller rabin test"""
@@ -47,13 +53,10 @@ def miller_rabin_test(n, k):
     global count
     count = 0
     s, t = getst1(n - 1)
+    print s, t
     while i <= k:
-        b = random.randint(2, n - 2)
+        b = generte_b(random.randint(2, n - 2), n)
         print "{0}'s test, b is {1}".format(i, b)
-        d = euclid(b, n)
-        if d > 1:
-            print "This number not pass the test!"
-            exit()
 
         j = 0
         try:
@@ -61,18 +64,24 @@ def miller_rabin_test(n, k):
         except OverflowError:
             print "The number is too big.But we can use another method!"
             r = ModExp(b, t, n)
-        if r == 1 or r == -1:
+
+        print r
+        if r == 1 or r == n - 1:
             pass
         else:
             while j < s:
                 j += 1
+                print j
                 r = (r * r) % n
-                if r == -1:
+                print r
+                if r == n - 1:
                     break
+            if s == j:
+                print "fffffffffffffffffffffffffffffffff"
         i += 1
     print "Congratulation!!The fake's passing rate is {0}".format(1 / float(math.pow(4, k)))
 
 
 if __name__ == "__main__":
-    # miller_rabin_test(71, 9)
-    print ModExp(15, 5, 10)
+    miller_rabin_test(26413, 5)
+    # print ModExp(22, 17, 2636329)

@@ -94,17 +94,20 @@ class RSA:
         else:
             return self.count, n
 
+    def generate_b(self, b, n):
+        if euclid(b, n) > 1:
+            b = random.randint(2, n - 2)
+            return self.generate_b(b, n)
+        else:
+            return b
+
     def miller_rabin_test(self, n):
         index = 1
         self.count = 0
         s, t = self.getst1(n - 1)
         while index <= 5:
-            b = random.randint(2, n - 2)
+            b = self.generate_b(random.randint(2, n - 2), n)
             print "\t\t\t{0}'s test, b is {1}".format(index, b)
-            d = euclid(b, n)
-            if d > 1:
-                print "\t\t\t\033[1;31;0m[-]This number not pass the test!"
-                return False
 
             j = 0
             try:
@@ -112,14 +115,16 @@ class RSA:
             except OverflowError:
                 print "\t\t\tThe number is too big.But we can use another method!"
                 r = ModExp(b, t, n)
-            if r == 1 or r == -1:
+            if r == 1 or r == n - 1:
                 pass
             else:
                 while j < s:
                     j += 1
                     r = (r * r) % n
-                    if r == -1:
+                    if r == n - 1:
                         break
+                if s == j:
+                    return False
             index += 1
         print "\t\t[+]Miller rabin test passed!The fake's passing rate is {0}".format(1 / float(math.pow(4, 5)))
         return True
@@ -188,6 +193,6 @@ class RSA:
 if __name__ == "__main__":
     n = RSA()
     n.generate_key()
-    cc = n.encode(22)
+    cc = n.encode(32655)
     print "[*]c is:%d" % cc
     print "[*]m is:%d" % n.decode(cc)
