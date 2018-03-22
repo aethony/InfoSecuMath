@@ -168,8 +168,9 @@ class RSA:
         n = p1 * p2
         yn = (p1 - 1) * (p2 - 1)
         if yn % self.e == 0:
+            print "\033[1;31;0m[-]Error! Bat n!"
             self.generate_key()
-            exit()
+            return
         print "[*]d is producing" + "." * 100
         E = Euclid(self.e, yn)
         d = E.method1()
@@ -195,4 +196,5 @@ if __name__ == "__main__":
     n.generate_key()
     cc = n.encode(32655)
     print "[*]c is:%d" % cc
-    print "[*]m is:%d" % n.decode(cc)
+    m = n.decode(cc)
+    print "[*]m is:%d" % m

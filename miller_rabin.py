@@ -83,5 +83,5 @@ def miller_rabin_test(n, k):
 
 
 if __name__ == "__main__":
-    miller_rabin_test(26413, 5)
-    # print ModExp(22, 17, 2636329)
+    # miller_rabin_test(26413, 5)
+    print ModExp(665385, 887633, 2535047)
