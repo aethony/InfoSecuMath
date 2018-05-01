@@ -184,17 +184,17 @@ class RSA:
         print "[*]sk is:",
         print self.sk
 
-    def encode(self, m):
+    def encrypt(self, m):
         return ModExp(m, self.pk[1], self.pk[0])
 
-    def decode(self, c):
+    def decrypt(self, c):
         return ModExp(c, self.sk[1], self.sk[0])
 
 
 if __name__ == "__main__":
     n = RSA()
     n.generate_key()
-    cc = n.encode(32655)
+    cc = n.encrypt(32655)
     print "[*]c is:%d" % cc
-    m = n.decode(cc)
+    m = n.decrypt(cc)
     print "[*]m is:%d" % m

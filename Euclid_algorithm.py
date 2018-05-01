@@ -76,13 +76,16 @@ class Euclid:
 
 
 if __name__ == "__main__":
-    if len(sys.argv) != 3:
-        print "仅需要两个数字！"
-        sys.exit()
-
-    if sys.argv[1].isdigit() and sys.argv[2].isdigit():
-        e = Euclid(int(sys.argv[1]), int(sys.argv[2]))
-        e.method1()
-        e.method2()
-    else:
-        print "仅需要数字！"
+    # if len(sys.argv) != 3:
+    #     print "仅需要两个数字！"
+    #     sys.exit()
+    #
+    # if sys.argv[1].isdigit() and sys.argv[2].isdigit():
+    #     e.method1()
+    #     e.method2()
+    #     e = Euclid(int(sys.argv[1]), int(sys.argv[2]))
+    # else:
+    #     print "仅需要数字！"
+    e = Euclid(23, 288)
+    e.method1()
+    e.method2()
